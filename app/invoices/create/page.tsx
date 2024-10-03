@@ -5,8 +5,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { sql } from 'drizzle-orm';
 import { db } from '@/db';
 
-export default function Page() {
-  return (
+export default async function Page() {
+
+    return (
     <main className="h-dvh space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold text-center">Create Invoice</h1>
@@ -45,7 +46,7 @@ export default function Page() {
           />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" className='w-32'>
+          <Button type="submit" className="w-32">
             Submit
           </Button>
         </div>
