@@ -5,13 +5,13 @@ import { db } from '@/db';
 import { redirect } from 'next/navigation';
 // import { invoiceSchema } from '@/lib/validation';
 export const createInvoice = async (fromData: FormData) => {
+  console.log('🚀 ~ createInvoice ~ fromData:', fromData);
   try {
     // const { value, description } = invoiceSchema.parse(fromData);
 
-    
     const value = fromData.get('value');
     const parsedValue = Math.floor(parseFloat(value as string) * 100);
-    
+
     const description = fromData.get('description') as string;
 
     const results = await db
@@ -24,8 +24,8 @@ export const createInvoice = async (fromData: FormData) => {
       .returning({
         id: Invoices.id,
       });
-   
-    redirect(`/invoices/${results[0].id}`);
+
+    return redirect(`/invoices/${results[0].id}`);
   } catch (error) {
     console.log(error);
     return 'An error occurred while creating the invoice.';

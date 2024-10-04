@@ -8,16 +8,16 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import React from 'react';
 
+type SegmentParams = { id: string };
+
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<SegmentParams>;
 }
 
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
 
-  if (!id || typeof id !==  'string') return notFound();
+  if (!id || typeof id !== 'string') return notFound();
 
   const [invoice] = await db.select().from(Invoices).where(eq(Invoices.id, +id)).limit(1);
 
@@ -30,7 +30,13 @@ export default async function Page({ params }: PageProps) {
       <div className="flex justify-between">
         <h1 className="text-3xl flex gap-2 items-center font-semibold text-center">
           Invoice #{+id}
-          <Badge className={cn(`text-white mt-0.5 bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`)}>{invoice.status}</Badge>
+          <Badge
+            className={cn(
+              `text-white mt-0.5 bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`
+            )}
+          >
+            {invoice.status}
+          </Badge>
         </h1>
       </div>
       <p className="text-2xl mb-3 -ml-1">{formatPrice(invoice.value / 100)}</p>
