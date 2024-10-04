@@ -9,9 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { STATUS_STYLES } from '@/constant/status-style';
 import { db } from '@/db';
 import { Invoices } from '@/db/schema';
-import { formatPrice } from '@/lib/utils';
+import { cn, formatPrice } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CirclePlus } from 'lucide-react';
 import Link from 'next/link';
@@ -48,7 +49,7 @@ export default async function Page() {
         </TableHeader>
         <TableBody>
           {invoices.map((invoice) => (
-            <TableRow key={invoice.id} className="hover:bg-gray-100">
+            <TableRow key={invoice.id}>
               <TableCell className="font-medium hidden sm:table-cell">
                 <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
                   {invoice.id}
@@ -71,7 +72,7 @@ export default async function Page() {
               </TableCell>
               <TableCell className="text-center">
                 <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                  <Badge variant="outline" className="bg-sky-600 text-white">
+                  <Badge variant="outline" className={cn('text-white',STATUS_STYLES[invoice.status])}>
                     {invoice.status}
                   </Badge>
                 </Link>
