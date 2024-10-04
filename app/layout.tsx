@@ -9,6 +9,7 @@ const inter = Recursive({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'invoicipedia',
   description: 'Invoicing made simple.',
+  icons: 'favicon.ico',
 };
 
 export default function RootLayout({
