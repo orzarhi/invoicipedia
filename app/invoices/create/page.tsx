@@ -1,17 +1,31 @@
-import { Button } from '@/components/ui/button';
+'use client';
+
+import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { createInvoice } from './actions';
+import Form from 'next/form';
+import { SyntheticEvent, useState } from 'react';
 
-export default async function Page() {
+export default function Page() {
+  const [state, setState] = useState('ready');
+
+  async function handleOnSubmit(event: SyntheticEvent) {
+    if (state === 'pending') {
+      event.preventDefault();
+      return;
+    }
+    setState('pending');
+  }
+
   return (
     <main className="h-dvh space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold text-center">Create Invoice</h1>
       </div>
 
-      <form action={createInvoice} className="space-y-6">
+      <Form action={createInvoice} onSubmit={handleOnSubmit} className="space-y-6">
         <div className="space-y-1">
           <Label htmlFor="name">Billing Name</Label>
           <Input id="name" name="name" placeholder="John Doe" />
@@ -39,11 +53,9 @@ export default async function Page() {
           />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" className="w-32">
-            Submit
-          </Button>
+          <SubmitButton className="w-36" />
         </div>
-      </form>
+      </Form>
     </main>
   );
 }

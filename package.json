@@ -15,16 +15,18 @@
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "lucide-react": "^0.447.0",
-    "next": "14.2.14",
+    "next": "^15.0.0-canary.177",
     "next-themes": "^0.3.0",
     "pg": "^8.13.0",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^19.0.0-rc-0751fac7-20241002",
+    "react-dom": "^19.0.0-rc-0751fac7-20241002",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",

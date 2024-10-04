@@ -3,21 +3,31 @@
 import { Invoices } from '@/db/schema';
 import { db } from '@/db';
 import { redirect } from 'next/navigation';
-
+// import { invoiceSchema } from '@/lib/validation';
 export const createInvoice = async (fromData: FormData) => {
-  const value = Math.floor(parseFloat(fromData.get('value') as string) * 100);
-  const description = fromData.get('description') as string;
+  try {
+    // const { value, description } = invoiceSchema.parse(fromData);
 
-  const results = await db
-    .insert(Invoices)
-    .values({
-      value,
-      description,
-      status: 'open',
-    })
-    .returning({
-      id: Invoices.id,
-    });
+    
+    const value = fromData.get('value');
+    const parsedValue = Math.floor(parseFloat(value as string) * 100);
+    
+    const description = fromData.get('description') as string;
 
-  redirect(`/invoices/${results[0].id}`);
+    const results = await db
+      .insert(Invoices)
+      .values({
+        value: parsedValue,
+        description,
+        status: 'open',
+      })
+      .returning({
+        id: Invoices.id,
+      });
+   
+    redirect(`/invoices/${results[0].id}`);
+  } catch (error) {
+    console.log(error);
+    return 'An error occurred while creating the invoice.';
+  }
 };

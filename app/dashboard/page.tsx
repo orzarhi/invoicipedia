@@ -1,18 +1,23 @@
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
+import { db } from '@/db';
+import { Invoices } from '@/db/schema';
+import { format } from 'date-fns';
 import { CirclePlus } from 'lucide-react';
 import Link from 'next/link';
 
-export default function Page() {
+export default async function Page() {
+  const invoices = await db.select().from(Invoices);
+
   return (
     <main className="h-dvh space-y-8 mt-8">
       <div className="flex justify-between">
@@ -40,7 +45,22 @@ export default function Page() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
+          {invoices.map((invoices) => (
+            <TableRow key={invoices.id}>
+              <TableCell className="font-medium">
+                {format(invoices.createTs, 'dd/MM/yy')}
+              </TableCell>
+              <TableCell>Or Zarhi</TableCell>
+              <TableCell className="hidden sm:table-cell">or@gmail.com</TableCell>
+              <TableCell className="text-center">
+                <Badge variant="outline" className="bg-sky-600 text-white">
+                  {invoices.status}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-right">${invoices.value / 100}</TableCell>
+            </TableRow>
+          ))}
+          {/* <TableRow>
             <TableCell className="font-medium">10/10/2024</TableCell>
             <TableCell>Or Zarhi</TableCell>
             <TableCell className="hidden sm:table-cell">or@gmail.com</TableCell>
@@ -50,7 +70,7 @@ export default function Page() {
               </Badge>
             </TableCell>
             <TableCell className="text-right">$250.00</TableCell>
-          </TableRow>
+          </TableRow> */}
         </TableBody>
       </Table>
     </main>
