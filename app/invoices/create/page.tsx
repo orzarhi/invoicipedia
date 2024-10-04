@@ -20,7 +20,7 @@ export default function Page() {
   }
 
   return (
-    <main className="h-dvh space-y-8 mt-8">
+    <main className="min-h-screen space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold text-center">Create Invoice</h1>
       </div>

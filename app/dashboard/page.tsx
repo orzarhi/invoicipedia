@@ -5,6 +5,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -25,8 +26,29 @@ import Link from 'next/link';
 export default async function Page() {
   const invoices = await db.select().from(Invoices);
 
+  if (!invoices.length) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center space-y-8">
+        <h1 className="text-3xl font-bold">No invoices available</h1>
+        <p className="text-muted-foreground text-center">
+          It looks like you haven&apos;t created any invoices yet. Start by adding a new
+          one!
+        </p>
+        <Link
+          href="/invoices/create"
+          className={buttonVariants({
+            variant: 'link',
+            className: 'text-[17px]',
+          })}
+        >
+          Create Invoice
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <main className="h-dvh space-y-8 mt-8">
+    <main className="min-h-screen space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold text-center">Invoices</h1>
         <Link
@@ -53,45 +75,93 @@ export default async function Page() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => {
-            const statusStyle = STATUS_STYLES.find((s) => s.status === invoice.status)?.tw;
-            return (
-              <TableRow key={invoice.id}>
-                <TableCell className="font-medium hidden sm:table-cell">
-                  <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                    {invoice.id}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                    {format(invoice.createTs, 'dd/MM/yy')}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                    Or Zarhi
-                  </Link>
-                </TableCell>
-                <TableCell className="hidden sm:table-cell">
-                  <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                    or@gmail.com
-                  </Link>
-                </TableCell>
-                <TableCell className="text-center">
-                  <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                    <Badge variant="outline" className={cn(`text-white bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`)}>
-                      {invoice.status}
-                    </Badge>
-                  </Link>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
-                    {formatPrice(invoice.value / 100)}
-                  </Link>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {false
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell className="hidden sm:table-cell">
+                    <Skeleton className="h-4 w-20" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-24" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-32" />
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <Skeleton className="h-4 w-40" />
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Skeleton className="h-4 w-16 mx-auto" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Skeleton className="h-4 w-20" />
+                  </TableCell>
+                </TableRow>
+              ))
+            : invoices.map((invoice) => {
+                const statusStyle = STATUS_STYLES.find(
+                  (s) => s.status === invoice.status
+                )?.tw;
+                return (
+                  <TableRow key={invoice.id}>
+                    <TableCell className="font-medium hidden sm:table-cell">
+                      <Link
+                        href={`/invoices/${invoice.id}`}
+                        className="block w-full h-full"
+                      >
+                        {invoice.id}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/invoices/${invoice.id}`}
+                        className="block w-full h-full"
+                      >
+                        {format(invoice.createTs, 'dd/MM/yy')}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/invoices/${invoice.id}`}
+                        className="block w-full h-full"
+                      >
+                        Or Zarhi
+                      </Link>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      <Link
+                        href={`/invoices/${invoice.id}`}
+                        className="block w-full h-full"
+                      >
+                        or@gmail.com
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Link
+                        href={`/invoices/${invoice.id}`}
+                        className="block w-full h-full"
+                      >
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            `text-white bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`
+                          )}
+                        >
+                          {invoice.status}
+                        </Badge>
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link
+                        href={`/invoices/${invoice.id}`}
+                        className="block w-full h-full"
+                      >
+                        {formatPrice(invoice.value / 100)}
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
         </TableBody>
       </Table>
     </main>

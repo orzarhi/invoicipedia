@@ -6,7 +6,6 @@ import { cn, formatPrice } from '@/lib/utils';
 import { format } from 'date-fns';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
-import React from 'react';
 
 type SegmentParams = { id: string };
 
@@ -21,16 +20,21 @@ export default async function Page({ params }: PageProps) {
 
   const invoiceId = +id;
 
-  if (isNaN(invoiceId)) return notFound();
-
-  const [invoice] = await db.select().from(Invoices).where(eq(Invoices.id, invoiceId)).limit(1);
+  if (isNaN(invoiceId)) {
+    throw new Error('Invalid invoice ID');
+  }
+  const [invoice] = await db
+    .select()
+    .from(Invoices)
+    .where(eq(Invoices.id, invoiceId))
+    .limit(1);
 
   if (!invoice) return notFound();
 
   const statusStyle = STATUS_STYLES.find((s) => s.status === invoice.status)?.tw;
 
   return (
-    <main className="h-dvh space-y-8 mt-8">
+    <main className="min-h-screen space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl flex gap-2 items-center font-semibold text-center">
           Invoice #{invoiceId}
