@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { STATUS_STYLES } from '@/constant/status-style';
+import { STATUS_STYLES } from '@/constant';
 import { db } from '@/db';
 import { Invoices } from '@/db/schema';
 import { cn, formatPrice } from '@/lib/utils';
@@ -15,33 +15,29 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const invoiceId = +params.id;
+  const { id } = params;
 
-  if (!invoiceId) return notFound();
+  if (!id || typeof id !==  'string') return notFound();
 
-  const [invoice] = await db
-    .select()
-    .from(Invoices)
-    .where(eq(Invoices.id, invoiceId))
-    .limit(1);
+  const [invoice] = await db.select().from(Invoices).where(eq(Invoices.id, +id)).limit(1);
 
   if (!invoice) return notFound();
+
+  const statusStyle = STATUS_STYLES.find((s) => s.status === invoice.status)?.tw;
 
   return (
     <main className="h-dvh space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl flex gap-2 items-center font-semibold text-center">
-          Invoice #{invoiceId}
-          <Badge className={cn('text-white mt-0.5 ', STATUS_STYLES[invoice.status])}>
-            {invoice.status}
-          </Badge>
+          Invoice #{id}
+          <Badge className={cn(`text-white mt-0.5 bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`)}>{invoice.status}</Badge>
         </h1>
       </div>
       <p className="text-2xl mb-3 -ml-1">{formatPrice(invoice.value / 100)}</p>
 
       <p className="text-lg mb-5">{invoice.description}</p>
 
-      <div className='flex flex-col gap-2'>
+      <div className="flex flex-col gap-2">
         <h2 className="font-bold text-lg">Billing Details</h2>
         <ul className="grid gap-2">
           <li className="flex gap-4">
