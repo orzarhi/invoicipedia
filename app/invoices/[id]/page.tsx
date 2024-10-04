@@ -15,7 +15,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   if (!id || typeof id !==  'string') return notFound();
 
@@ -29,7 +29,7 @@ export default async function Page({ params }: PageProps) {
     <main className="h-dvh space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl flex gap-2 items-center font-semibold text-center">
-          Invoice #{id}
+          Invoice #{+id}
           <Badge className={cn(`text-white mt-0.5 bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`)}>{invoice.status}</Badge>
         </h1>
       </div>
