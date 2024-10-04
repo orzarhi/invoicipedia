@@ -7,7 +7,7 @@ import './globals.css';
 const inter = Recursive({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Invoicipedia',
+  title: 'invoicipedia',
   description: 'Invoicing made simple.',
 };
 
