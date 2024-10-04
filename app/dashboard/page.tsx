@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table';
 import { db } from '@/db';
 import { Invoices } from '@/db/schema';
+import { formatPrice } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CirclePlus } from 'lucide-react';
 import Link from 'next/link';
@@ -37,7 +38,8 @@ export default async function Page() {
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Date</TableHead>
+            <TableHead className="hidden sm:table-cell w-[100px]">Id</TableHead>
+            <TableHead className='w-[100px] sm:w-0'>Date</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead className="hidden sm:table-cell">Email</TableHead>
             <TableHead className="text-center">Status</TableHead>
@@ -45,32 +47,42 @@ export default async function Page() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoices) => (
-            <TableRow key={invoices.id}>
-              <TableCell className="font-medium">
-                {format(invoices.createTs, 'dd/MM/yy')}
+          {invoices.map((invoice) => (
+            <TableRow key={invoice.id} className="hover:bg-gray-100">
+              <TableCell className="font-medium hidden sm:table-cell">
+                <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
+                  {invoice.id}
+                </Link>
               </TableCell>
-              <TableCell>Or Zarhi</TableCell>
-              <TableCell className="hidden sm:table-cell">or@gmail.com</TableCell>
+              <TableCell>
+                <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
+                  {format(invoice.createTs, 'dd/MM/yy')}
+                </Link>
+              </TableCell>
+              <TableCell>
+                <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
+                  Or Zarhi
+                </Link>
+              </TableCell>
+              <TableCell className="hidden sm:table-cell">
+                <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
+                  or@gmail.com
+                </Link>
+              </TableCell>
               <TableCell className="text-center">
-                <Badge variant="outline" className="bg-sky-600 text-white">
-                  {invoices.status}
-                </Badge>
+                <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
+                  <Badge variant="outline" className="bg-sky-600 text-white">
+                    {invoice.status}
+                  </Badge>
+                </Link>
               </TableCell>
-              <TableCell className="text-right">${invoices.value / 100}</TableCell>
+              <TableCell className="text-right">
+                <Link href={`/invoices/${invoice.id}`} className="block w-full h-full">
+                  {formatPrice(invoice.value / 100)}
+                </Link>
+              </TableCell>
             </TableRow>
           ))}
-          {/* <TableRow>
-            <TableCell className="font-medium">10/10/2024</TableCell>
-            <TableCell>Or Zarhi</TableCell>
-            <TableCell className="hidden sm:table-cell">or@gmail.com</TableCell>
-            <TableCell className="text-center">
-              <Badge variant="outline" className="bg-sky-600 text-white">
-                Open
-              </Badge>
-            </TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-          </TableRow> */}
         </TableBody>
       </Table>
     </main>
