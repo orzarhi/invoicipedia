@@ -19,7 +19,11 @@ export default async function Page({ params }: PageProps) {
 
   if (!id || typeof id !== 'string') return notFound();
 
-  const [invoice] = await db.select().from(Invoices).where(eq(Invoices.id, +id)).limit(1);
+  const invoiceId = +id;
+
+  if (isNaN(invoiceId)) return notFound();
+
+  const [invoice] = await db.select().from(Invoices).where(eq(Invoices.id, invoiceId)).limit(1);
 
   if (!invoice) return notFound();
 
@@ -29,7 +33,7 @@ export default async function Page({ params }: PageProps) {
     <main className="h-dvh space-y-8 mt-8">
       <div className="flex justify-between">
         <h1 className="text-3xl flex gap-2 items-center font-semibold text-center">
-          Invoice #{+id}
+          Invoice #{invoiceId}
           <Badge
             className={cn(
               `text-white mt-0.5 bg-${statusStyle} border-${statusStyle} hover:bg-${statusStyle}`

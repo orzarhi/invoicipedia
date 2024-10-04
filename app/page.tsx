@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <main className="flex flex-col justify-center gap-5 h-dvh text-center">
-      <h1 className="text-5xl font-bold">invoicipedia</h1>
+      <h1 className="text-5xl font-bold text-shadow">invoicipedia</h1>
       <Link
         href="/dashboard"
         className={buttonVariants({

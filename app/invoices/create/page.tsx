@@ -25,6 +25,7 @@ export default function Page() {
         <h1 className="text-3xl font-semibold text-center">Create Invoice</h1>
       </div>
 
+      {/* @ts-expect-error Description: This error is expected because the Form component does not have a valid action prop. */}
       <Form action={createInvoice} onSubmit={handleOnSubmit} className="space-y-6">
         <div className="space-y-1">
           <Label htmlFor="name">Billing Name</Label>
